@@ -1,4 +1,4 @@
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using System.Collections.Generic;
@@ -18,10 +18,10 @@ public class HiddenObjectUI : MonoBehaviour
     public TextMeshProUGUI leftButtonText;
     public TextMeshProUGUI rightButtonText;
 
-    [Header("Trait Selection")]
-    public Transform traitsContainer;
-    public GameObject traitButtonPrefab;
-
+    // Track current item being viewed
+    private string currentItemName;
+    private List<ItemTrait> currentHighlightedTraits;
+    
     private void Start()
     {
         if (xMarker != null)
@@ -47,103 +47,64 @@ public class HiddenObjectUI : MonoBehaviour
             xMarker.gameObject.SetActive(false);
     }
 
+    // Show item with save to journal button
     public void ShowItemWithTraits(string title, string description, List<ItemTrait> highlightedTraits, Hotspot hotspot)
     {
-        // Clear previous trait buttons
-        if (traitsContainer != null)
-        {
-            foreach (Transform child in traitsContainer)
-            {
-                Destroy(child.gameObject);
-            }
-        }
+        // Store current item info
+        currentItemName = hotspot.GetItemName();
+        currentHighlightedTraits = highlightedTraits;
 
-        // Create trait selection buttons
-        if (highlightedTraits != null && highlightedTraits.Count > 0 && traitsContainer != null && traitButtonPrefab != null)
-        {
-            foreach (var trait in highlightedTraits)
-            {
-                GameObject buttonObj = Instantiate(traitButtonPrefab, traitsContainer);
-                Button button = buttonObj.GetComponent<Button>();
-                TextMeshProUGUI buttonText = buttonObj.GetComponentInChildren<TextMeshProUGUI>();
+        // Determine if there are highlighted traits to save
+        bool hasHighlightedTraits = highlightedTraits != null && highlightedTraits.Count > 0;
 
-                // Color code button by category
-                Image buttonImage = button.GetComponent<Image>();
-                if (buttonImage != null)
-                {
-                    buttonImage.color = GetCategoryButtonColor(trait.category);
-                }
-
-                if (buttonText != null)
-                {
-                    string categoryLabel = GetCategoryLabel(trait.category);
-                    buttonText.text = $"Save {categoryLabel}: {trait.traitText}";
-                }
-
-                if (button != null)
-                {
-                    string traitTextCopy = trait.traitText;
-                    ClueCategory categoryCopy = trait.category;
-
-                    button.onClick.AddListener(() =>
-                        SaveClue(hotspot.GetItemName(), traitTextCopy, categoryCopy));
-                }
-            }
-
-            traitsContainer.gameObject.SetActive(true);
-        }
-        else
-        {
-            if (traitsContainer != null)
-                traitsContainer.gameObject.SetActive(false);
-        }
-
+        // Show popup with Save to Journal as right button
         ShowPopup(
             title: title,
             body: description,
             leftButtonText: "Close",
-            rightButtonText: null,
+            rightButtonText: hasHighlightedTraits ? "Save" : null,
             onLeftClick: () => ClosePopup(),
-            onRightClick: null
+            onRightClick: hasHighlightedTraits ? (System.Action)OnSaveToJournal : null
         );
     }
 
-    private void SaveClue(string sourceName, string clueText, ClueCategory category)
+    private void OnSaveToJournal()
     {
-        if (ClueManager.Instance != null)
+        if (ClueManager.Instance != null && currentHighlightedTraits != null && currentHighlightedTraits.Count > 0)
         {
-            ClueManager.Instance.AddClue(sourceName, clueText, category);
-            Debug.Log($"Saved {category} clue: {sourceName} - {clueText}");
+            ClueManager.Instance.AddItemTraits(currentItemName, currentHighlightedTraits);
+            Debug.Log($"Saved all traits from {currentItemName} to journal");
+
+            // Give visual feedback
+            if (rightButtonText != null)
+            {
+                string originalText = rightButtonText.text;
+                rightButtonText.text = "Saved!";
+
+                // Disable button temporarily
+                if (rightButton != null)
+                    rightButton.interactable = false;
+
+                // Reset after 1 second
+                Invoke(nameof(ResetSaveButtonState), 1f);
+            }
+        }
+        else
+        {
+            Debug.LogWarning("Cannot save - no highlighted traits or ClueManager missing");
         }
     }
 
-    private Color GetCategoryButtonColor(ClueCategory category)
+    private void ResetSaveButtonState()
     {
-        switch (category)
+        if (rightButtonText != null)
         {
-            case ClueCategory.Item:
-                return new Color(1f, 0.84f, 0f); // Gold
-            case ClueCategory.Location:
-                return new Color(0f, 0.81f, 0.82f); // Cyan
-            case ClueCategory.Person:
-                return new Color(1f, 0.41f, 0.71f); // Pink
-            default:
-                return Color.white;
+            rightButtonText.text = "Save to Journal";
         }
-    }
 
-    private string GetCategoryLabel(ClueCategory category)
-    {
-        switch (category)
+        if (rightButton != null)
         {
-            case ClueCategory.Item:
-                return "Item";
-            case ClueCategory.Location:
-                return "Location";
-            case ClueCategory.Person:
-                return "Person";
-            default:
-                return "Clue";
+            rightButton.interactable = true;
         }
     }
 
@@ -163,6 +124,7 @@ public class HiddenObjectUI : MonoBehaviour
         if (popupBody != null)
             popupBody.text = body;
 
+        // Configure left button
         if (leftButton != null && this.leftButtonText != null)
         {
             this.leftButtonText.text = leftButtonText;
@@ -173,6 +135,7 @@ public class HiddenObjectUI : MonoBehaviour
                 leftButton.onClick.AddListener(() => onLeftClick());
         }
 
+        // Configure right button
         if (rightButton != null && this.rightButtonText != null)
         {
             bool showRightButton = !string.IsNullOrEmpty(rightButtonText);
@@ -193,14 +156,9 @@ public class HiddenObjectUI : MonoBehaviour
 
     public void ClosePopup()
     {
-        if (traitsContainer != null)
-        {
-            foreach (Transform child in traitsContainer)
-            {
-                Destroy(child.gameObject);
-            }
-            traitsContainer.gameObject.SetActive(false);
-        }
+        // Reset current item tracking
+        currentItemName = null;
+        currentHighlightedTraits = null;
 
         if (popupPanel != null)
             popupPanel.SetActive(false);

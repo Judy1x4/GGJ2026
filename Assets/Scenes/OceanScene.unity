@@ -451,8 +451,6 @@ MonoBehaviour:
   rightButton: {fileID: 1240826286}
   leftButtonText: {fileID: 1624763730}
   rightButtonText: {fileID: 366370821}
-  traitsContainer: {fileID: 0}
-  traitButtonPrefab: {fileID: 0}
 --- !u!114 &443593133
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -948,7 +946,22 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Hotspot
   itemName: Basket
-  traits: []
+  traits:
+  - traitText: 'A '
+    isHighlighted: 0
+    category: 0
+  - traitText: cute
+    isHighlighted: 0
+    category: 0
+  - traitText: portable
+    isHighlighted: 0
+    category: 0
+  - traitText: large
+    isHighlighted: 0
+    category: 0
+  - traitText: basket.
+    isHighlighted: 0
+    category: 0
 --- !u!114 &627904469
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2521,7 +2534,22 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Hotspot
   itemName: Telescope
-  traits: []
+  traits:
+  - traitText: 'A '
+    isHighlighted: 0
+    category: 0
+  - traitText: large
+    isHighlighted: 0
+    category: 0
+  - traitText: blood-stained
+    isHighlighted: 1
+    category: 0
+  - traitText: fire-catchable
+    isHighlighted: 1
+    category: 0
+  - traitText: telescope
+    isHighlighted: 0
+    category: 0
 --- !u!114 &2123819203
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2649,7 +2677,22 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Hotspot
   itemName: Axe
-  traits: []
+  traits:
+  - traitText: 'A '
+    isHighlighted: 0
+    category: 0
+  - traitText: short-ranged
+    isHighlighted: 1
+    category: 0
+  - traitText: metallic
+    isHighlighted: 1
+    category: 0
+  - traitText: rusty
+    isHighlighted: 0
+    category: 0
+  - traitText: with dried blood.
+    isHighlighted: 0
+    category: 0
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

@@ -41,6 +41,41 @@ public class ClueManager : MonoBehaviour
         }
     }
 
+    public void AddItemTraits(string itemName, List<ItemTrait> highlightedTraits)
+    {
+        if (highlightedTraits == null || highlightedTraits.Count == 0)
+        {
+            Debug.LogWarning($"No highlighted traits to save for {itemName}");
+            return;
+        }
+
+        // Group traits by category
+        var itemTraits = highlightedTraits.Where(t => t.category == ClueCategory.Item).ToList();
+        var locationTraits = highlightedTraits.Where(t => t.category == ClueCategory.Location).ToList();
+        var personTraits = highlightedTraits.Where(t => t.category == ClueCategory.Person).ToList();
+
+        // Create entries for each category
+        if (itemTraits.Count > 0)
+        {
+            string combinedText = string.Join(", ", itemTraits.Select(t => t.traitText.TrimEnd(',', '.', ' ')));
+            AddClue(itemName, combinedText, ClueCategory.Item);
+        }
+
+        if (locationTraits.Count > 0)
+        {
+            string combinedText = string.Join(", ", locationTraits.Select(t => t.traitText.TrimEnd(',', '.', ' ')));
+            AddClue(itemName, combinedText, ClueCategory.Location);
+        }
+
+        if (personTraits.Count > 0)
+        {
+            string combinedText = string.Join(", ", personTraits.Select(t => t.traitText.TrimEnd(',', '.', ' ')));
+            AddClue(itemName, combinedText, ClueCategory.Person);
+        }
+
+        Debug.Log($"Saved all highlighted traits from {itemName} to journal");
+    }
+
     // Get all clues
     public List<ClueEntry> GetAllClues()
     {
