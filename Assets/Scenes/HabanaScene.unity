@@ -930,8 +930,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -91, y: -25}
-  m_SizeDelta: {x: 63.2347, y: 62.8001}
+  m_AnchoredPosition: {x: 170.31705, y: -133}
+  m_SizeDelta: {x: 24.4217, y: 62.8001}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &627904468
 MonoBehaviour:
@@ -945,21 +945,24 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9f3360ce18ee06640873bb32b96c1396, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Hotspot
-  itemName: Basket
+  itemName: Candlestick
   traits:
   - traitText: 'A '
     isHighlighted: 0
     category: 0
-  - traitText: cute
+  - traitText: flammatory
+    isHighlighted: 1
+    category: 0
+  - traitText: short-ranged
+    isHighlighted: 1
+    category: 0
+  - traitText: heart-melting
     isHighlighted: 0
     category: 0
-  - traitText: portable
-    isHighlighted: 0
+  - traitText: household
+    isHighlighted: 1
     category: 0
-  - traitText: large
-    isHighlighted: 0
-    category: 0
-  - traitText: basket.
+  - traitText: item.
     isHighlighted: 0
     category: 0
 --- !u!114 &627904469
@@ -2007,7 +2010,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: -8210071984612457726, guid: 4a0c36e3d19ccf245b4d11f9c40b4fe5, type: 3}
+  m_Sprite: {fileID: 8200244303929595897, guid: bf9b2f113c0f84a479cfc78c40ea6055, type: 3}
   m_Type: 0
   m_PreserveAspect: 1
   m_FillCenter: 1
@@ -2496,7 +2499,7 @@ GameObject:
   - component: {fileID: 2123819203}
   - component: {fileID: 2123819202}
   m_Layer: 5
-  m_Name: Hotspot _Telescope
+  m_Name: Hotspot _Camera
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2518,7 +2521,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -133, y: -202}
+  m_AnchoredPosition: {x: -132, y: -255}
   m_SizeDelta: {x: 63.2347, y: 62.8001}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &2123819202
@@ -2538,16 +2541,19 @@ MonoBehaviour:
   - traitText: 'A '
     isHighlighted: 0
     category: 0
-  - traitText: large
+  - traitText: fashionable
     isHighlighted: 0
     category: 0
-  - traitText: blood-stained
+  - traitText: small
     isHighlighted: 1
     category: 0
-  - traitText: fire-catchable
+  - traitText: portable
+    isHighlighted: 0
+    category: 0
+  - traitText: metallic
     isHighlighted: 1
     category: 0
-  - traitText: telescope
+  - traitText: .Indispensable for travelling.
     isHighlighted: 0
     category: 0
 --- !u!114 &2123819203
@@ -2601,7 +2607,7 @@ GameObject:
   - component: {fileID: 2127112880}
   - component: {fileID: 2127112882}
   m_Layer: 5
-  m_Name: Hotspot_Axe
+  m_Name: Hotspot_Guitar
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2623,7 +2629,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 81.61736, y: -314.09174}
+  m_AnchoredPosition: {x: 65.7, y: -272.2}
   m_SizeDelta: {x: 63.2347, y: 62.8001}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &2127112880
@@ -2676,7 +2682,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9f3360ce18ee06640873bb32b96c1396, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Hotspot
-  itemName: Axe
+  itemName: Guitar
   traits:
   - traitText: 'A '
     isHighlighted: 0
@@ -2684,13 +2690,13 @@ MonoBehaviour:
   - traitText: short-ranged
     isHighlighted: 1
     category: 0
-  - traitText: metallic
-    isHighlighted: 1
-    category: 0
-  - traitText: rusty
+  - traitText: melodic
     isHighlighted: 0
     category: 0
-  - traitText: with dried blood.
+  - traitText: instrument.
+    isHighlighted: 0
+    category: 0
+  - traitText: Create songs that captivate people's heart.
     isHighlighted: 0
     category: 0
 --- !u!1660057539 &9223372036854775807
