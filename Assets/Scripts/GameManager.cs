@@ -28,6 +28,10 @@ public class GameManager : MonoBehaviour
 
     private void Start()
     {
+        if (JournalButtonManager.Instance != null)
+        {
+            JournalButtonManager.Instance.ShowButton();
+        }
         uiManager = GetComponent<HiddenObjectUI>();
 
         // Get max attempts from game progress
@@ -43,6 +47,14 @@ public class GameManager : MonoBehaviour
 
         remainingAttempts = maxAttempts;
         UpdateAttemptsUI();
+    }
+
+    private void OnDestroy()
+    {
+        if (JournalButtonManager.Instance != null)
+        {
+            JournalButtonManager.Instance.HideButton(); 
+        }
     }
 
     public bool CanExamine()

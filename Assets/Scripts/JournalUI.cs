@@ -6,6 +6,7 @@ using System.Collections.Generic;
 public class JournalUI : MonoBehaviour
 {
     [Header("UI References")]
+    public Canvas journalCanvas;
     public GameObject journalPanel;
     public Transform cluesContent;
     public GameObject clueEntryPrefab;
@@ -17,17 +18,37 @@ public class JournalUI : MonoBehaviour
     public Button locationsTab;
     public Button personsTab;
 
-    [Header("Summary")]
-    public TextMeshProUGUI itemSummary;
-    public TextMeshProUGUI locationSummary;
-    public TextMeshProUGUI personSummary;
-
     [Header("Category Icons")]
     public Sprite itemIcon;
     public Sprite locationIcon;
     public Sprite personIcon;
 
+    // REMOVED: Summary fields
+
     private ClueCategory currentCategory = ClueCategory.Item;
+
+    public static JournalUI Instance { get; private set; }
+
+    private void Awake()
+    {
+        if (Instance == null)
+        {
+            Instance = this;
+            DontDestroyOnLoad(gameObject);
+
+            if (journalCanvas != null)
+            {
+                DontDestroyOnLoad(journalCanvas.gameObject);
+            }
+
+            Debug.Log("JournalUI singleton created and persisted");
+        }
+        else
+        {
+            Destroy(gameObject);
+            return;
+        }
+    }
 
     private void Start()
     {
@@ -37,7 +58,6 @@ public class JournalUI : MonoBehaviour
         if (closeJournalButton != null)
             closeJournalButton.onClick.AddListener(CloseJournal);
 
-        // Setup tabs
         if (itemsTab != null)
             itemsTab.onClick.AddListener(() => ShowCategory(ClueCategory.Item));
 
@@ -52,15 +72,19 @@ public class JournalUI : MonoBehaviour
     {
         if (journalPanel == null) return;
 
-        currentCategory = ClueCategory.Item; // Start with Items tab
+        currentCategory = ClueCategory.Item;
         RefreshJournal();
         journalPanel.SetActive(true);
+
+        Debug.Log("Journal opened");
     }
 
     public void CloseJournal()
     {
         if (journalPanel != null)
             journalPanel.SetActive(false);
+
+        Debug.Log("Journal closed");
     }
 
     private void ShowCategory(ClueCategory category)
@@ -73,7 +97,7 @@ public class JournalUI : MonoBehaviour
     private void RefreshJournal()
     {
         RefreshCluesList();
-        RefreshSummary();
+        // REMOVED: RefreshSummary();
         UpdateTabHighlight();
     }
 
@@ -123,32 +147,11 @@ public class JournalUI : MonoBehaviour
         }
     }
 
-    private void RefreshSummary()
-    {
-        if (ClueManager.Instance == null) return;
-
-        // Count clues in each category
-        int itemCount = ClueManager.Instance.GetClueCount(ClueCategory.Item);
-        int locationCount = ClueManager.Instance.GetClueCount(ClueCategory.Location);
-        int personCount = ClueManager.Instance.GetClueCount(ClueCategory.Person);
-
-        // Update summary text
-        if (itemSummary != null)
-            itemSummary.text = itemCount > 0 ? $"Item: {itemCount} clue(s)" : "Item: ???";
-
-        if (locationSummary != null)
-            locationSummary.text = locationCount > 0 ? $"Location: {locationCount} clue(s)" : "Location: ???";
-
-        if (personSummary != null)
-            personSummary.text = personCount > 0 ? $"Person: {personCount} clue(s)" : "Person: ???";
-    }
+    // REMOVED: RefreshSummary() method
 
     private void UpdateTabHighlight()
     {
-        // Update tab colors to show active tab
-        ColorBlock itemColors = itemsTab.colors;
-        ColorBlock locationColors = locationsTab.colors;
-        ColorBlock personColors = personsTab.colors;
+        if (itemsTab == null || locationsTab == null || personsTab == null) return;
 
         // Reset all to normal
         itemsTab.interactable = true;
@@ -159,7 +162,7 @@ public class JournalUI : MonoBehaviour
         switch (currentCategory)
         {
             case ClueCategory.Item:
-                itemsTab.interactable = false; // Makes it appear "selected"
+                itemsTab.interactable = false;
                 break;
             case ClueCategory.Location:
                 locationsTab.interactable = false;
