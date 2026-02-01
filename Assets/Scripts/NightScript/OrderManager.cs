@@ -6,6 +6,9 @@ public class OrderManager : MonoBehaviour
     [SerializeField] private List<MonoBehaviour> customerBehaviours = new();
     [SerializeField] private Recipe recipe; // drag your Recipe component here
     [SerializeField] private OrderUI orderUI;
+    [SerializeField] private PatienceManager patienceManager;
+    [SerializeField] private PlayerStatus playerStatus;
+    [SerializeField] private BurgerPhaseCompleteUI burgerPhaseCompleteUI;
 
 
     private int currentIndex = -1;
@@ -29,6 +32,9 @@ public class OrderManager : MonoBehaviour
         {
             CurrentCustomer = null;
             Debug.Log("All customers served!");
+            int patience = patienceManager.GetCurrentPatience();
+            playerStatus.SetAttempts(patience);
+            burgerPhaseCompleteUI.ShowCompletionUI(patience);
             return;
         }
 
@@ -78,11 +84,13 @@ public class OrderManager : MonoBehaviour
             CurrentCustomer.FinishOrder();
             orderUI.OnSuccess();
             NextCustomer();
+            patienceManager.OnCorrectOrder();
         }
         else
         {
             CurrentCustomer.OnServedWrong();
             orderUI.OnFailure();
+            patienceManager.OnWrongOrder();
         }
     }
 }

@@ -15,9 +15,9 @@ public class SecretUI : MonoBehaviour
     }
 
     // Update is called once per frame
-    public void OnListen()
+    public void OnListen(string secret)
     {
-        secretText.text = secrets.GetNextSecret();
+        secretText.text = secret;
         secretBubble.SetActive(true);
     }
 

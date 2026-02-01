@@ -15,6 +15,9 @@ public class ListenUI : MonoBehaviour, IPointerClickHandler
     [SerializeField] private List<IngredientSelect> ingredientSelects = new();
 
     [SerializeField] private SecretUI secretUI;
+    [SerializeField] private Secrets secrets;
+
+    [SerializeField] private PlayerStatus playerStatus;
 
     [SerializeField] private float pauseSeconds = 5f;
     private Coroutine pauseRoutine;
@@ -55,8 +58,10 @@ public class ListenUI : MonoBehaviour, IPointerClickHandler
                 ingredientSelect.DisableCollider();
         }
         orderSubmit.enabled = false;
-        secretUI.OnListen();
+        string secret = secrets.GetNextSecret();
+        secretUI.OnListen(secret);
         orderUI.OnListen();
+        playerStatus.AddSecret(secret);
 
         yield return new WaitForSeconds(pauseSeconds);
 

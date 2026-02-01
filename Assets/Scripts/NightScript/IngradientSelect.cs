@@ -5,9 +5,11 @@ public class IngredientSelect : MonoBehaviour, IPointerClickHandler
 {
     public Ingredient ingredient;
     public OrderSubmit orderSubmit;
+    private bool inputEnabled = true;
 
     public void OnPointerClick(PointerEventData eventData)
     {
+        if (!inputEnabled) return;
         if (ingredient.gameObject.activeSelf)
         {
             ingredient.isSelected = false;
@@ -24,11 +26,11 @@ public class IngredientSelect : MonoBehaviour, IPointerClickHandler
 
     public void DisableCollider()
     {
-        GetComponent<BoxCollider2D>().enabled = false;
+        inputEnabled = false;
     }
 
     public void ActivateCollider()
     {
-        GetComponent<BoxCollider2D>().enabled = true;
+        inputEnabled = true;
     }
 }
