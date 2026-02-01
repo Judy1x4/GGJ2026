@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.SceneManagement;
 
 public class GameProgressManager : MonoBehaviour
 {
@@ -18,7 +19,7 @@ public class GameProgressManager : MonoBehaviour
     public UnityEvent OnNightEnded;
     public UnityEvent OnAllNightsComplete;
 
-    void Start()
+    void Awake()
     {
         if (Instance == null)
         {
@@ -61,6 +62,11 @@ public class GameProgressManager : MonoBehaviour
         {
             Debug.Log("All nights complete! Time for deduction.");
             OnAllNightsComplete?.Invoke();
+        }
+        else
+        {
+            // Go to burger selling phase
+            SceneManager.LoadScene("NightScene");
         }
     }
 
