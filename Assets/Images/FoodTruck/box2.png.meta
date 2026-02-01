@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: 313a9ca5562b2344a80fb2d5bb3c4f06
+guid: 84c835dbe062b48478e7f10814938e29
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 4606329831825822570
-    second: owl_night_0
+      213: -9148079100729670451
+    second: box2_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -113,13 +113,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: owl_night_0
+      name: box2_0
       rect:
         serializedVersion: 2
-        x: 110
-        y: 116
-        width: 580
-        height: 853
+        x: 145
+        y: 68
+        width: 216
+        height: 326
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -128,8 +128,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: a635340a398fcef30800000000000000
-      internalID: 4606329831825822570
+      spriteID: dc445d7c68e7b0180800000000000000
+      internalID: -9148079100729670451
       vertices: []
       indices: 
       edges: []
@@ -148,7 +148,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      owl_night_0: 4606329831825822570
+      box2_0: -9148079100729670451
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

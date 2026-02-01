@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: 313a9ca5562b2344a80fb2d5bb3c4f06
+guid: bf526c041738c9944beb8f62b91aeccd
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 4606329831825822570
-    second: owl_night_0
+      213: 8273973793056588403
+    second: bun2_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -113,13 +113,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: owl_night_0
+      name: bun2_0
       rect:
         serializedVersion: 2
-        x: 110
-        y: 116
-        width: 580
-        height: 853
+        x: 72
+        y: 64
+        width: 151
+        height: 106
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -128,8 +128,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: a635340a398fcef30800000000000000
-      internalID: 4606329831825822570
+      spriteID: 3728700d35f03d270800000000000000
+      internalID: 8273973793056588403
       vertices: []
       indices: 
       edges: []
@@ -148,7 +148,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      owl_night_0: 4606329831825822570
+      bun2_0: 8273973793056588403
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
