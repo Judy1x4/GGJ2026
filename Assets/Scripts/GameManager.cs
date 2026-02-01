@@ -142,28 +142,20 @@ public class GameManager : MonoBehaviour
     {
         Debug.Log("EndNightAndLeave called!");
 
-        // End the night in GameProgressManager
+        // End the night in GameProgressManager (it handles scene loading)
         if (GameProgressManager.Instance != null)
         {
             Debug.Log($"Current night BEFORE EndNight: {GameProgressManager.Instance.currentNight}");
             GameProgressManager.Instance.EndNight();
             Debug.Log($"Current night AFTER EndNight: {GameProgressManager.Instance.currentNight}");
-
-            // Check if all nights are complete
-            if (GameProgressManager.Instance.IsGameComplete())
-            {
-                Debug.Log("All nights complete! Going to deduction.");
-                SceneManager.LoadScene("DeductionScene");
-                return;
-            }
+            // EndNight() now handles loading NightScene or DeductionScene
         }
         else
         {
             Debug.LogError("GameProgressManager.Instance is NULL!");
+            // Fallback: go to NightScene
+            SceneManager.LoadScene("NightScene");
         }
-
-        // Go back to location selection
-        SceneManager.LoadScene("LocationSelectionScene");
     }
 
     public int GetRemainingAttempts()

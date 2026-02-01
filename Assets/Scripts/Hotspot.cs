@@ -48,7 +48,7 @@ public class Hotspot : MonoBehaviour, IPointerClickHandler
         switch (category)
         {
             case ClueCategory.Item:
-                return "#FFD700"; // Gold
+                return "#FF0000"; // Red
             case ClueCategory.Location:
                 return "#00CED1"; // Cyan/Turquoise
             case ClueCategory.Person:
