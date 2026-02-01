@@ -23,8 +23,6 @@ public class JournalUI : MonoBehaviour
     public Sprite locationIcon;
     public Sprite personIcon;
 
-    // REMOVED: Summary fields
-
     private ClueCategory currentCategory = ClueCategory.Item;
 
     public static JournalUI Instance { get; private set; }
@@ -39,12 +37,16 @@ public class JournalUI : MonoBehaviour
             if (journalCanvas != null)
             {
                 DontDestroyOnLoad(journalCanvas.gameObject);
+                
+                // Set canvas sorting order so it doesn't block other UI
+                journalCanvas.sortingOrder = 100;
             }
 
             Debug.Log("JournalUI singleton created and persisted");
         }
         else
         {
+            // Destroy the duplicate
             Destroy(gameObject);
             return;
         }
@@ -52,20 +54,37 @@ public class JournalUI : MonoBehaviour
 
     private void Start()
     {
+        SetupListeners();
+    }
+
+    private void SetupListeners()
+    {
         if (journalPanel != null)
             journalPanel.SetActive(false);
 
         if (closeJournalButton != null)
+        {
+            closeJournalButton.onClick.RemoveAllListeners();
             closeJournalButton.onClick.AddListener(CloseJournal);
+        }
 
         if (itemsTab != null)
+        {
+            itemsTab.onClick.RemoveAllListeners();
             itemsTab.onClick.AddListener(() => ShowCategory(ClueCategory.Item));
+        }
 
         if (locationsTab != null)
+        {
+            locationsTab.onClick.RemoveAllListeners();
             locationsTab.onClick.AddListener(() => ShowCategory(ClueCategory.Location));
+        }
 
         if (personsTab != null)
+        {
+            personsTab.onClick.RemoveAllListeners();
             personsTab.onClick.AddListener(() => ShowCategory(ClueCategory.Person));
+        }
     }
 
     public void OpenJournal()
@@ -75,6 +94,12 @@ public class JournalUI : MonoBehaviour
         currentCategory = ClueCategory.Item;
         RefreshJournal();
         journalPanel.SetActive(true);
+
+        // Ensure canvas is on top when opened
+        if (journalCanvas != null)
+        {
+            journalCanvas.sortingOrder = 100;
+        }
 
         Debug.Log("Journal opened");
     }
@@ -87,6 +112,11 @@ public class JournalUI : MonoBehaviour
         Debug.Log("Journal closed");
     }
 
+    public bool IsJournalOpen()
+    {
+        return journalPanel != null && journalPanel.activeSelf;
+    }
+
     private void ShowCategory(ClueCategory category)
     {
         currentCategory = category;
@@ -97,7 +127,6 @@ public class JournalUI : MonoBehaviour
     private void RefreshJournal()
     {
         RefreshCluesList();
-        // REMOVED: RefreshSummary();
         UpdateTabHighlight();
     }
 
@@ -147,8 +176,6 @@ public class JournalUI : MonoBehaviour
         }
     }
 
-    // REMOVED: RefreshSummary() method
-
     private void UpdateTabHighlight()
     {
         if (itemsTab == null || locationsTab == null || personsTab == null) return;
@@ -195,5 +222,15 @@ public class JournalUI : MonoBehaviour
             ClueManager.Instance.ClearAllClues();
             RefreshJournal();
         }
+    }
+
+    /// <summary>
+    /// Call this on game reset to properly clean up the journal state
+    /// </summary>
+    public void ResetJournal()
+    {
+        CloseJournal();
+        ClearAllClues();
+        currentCategory = ClueCategory.Item;
     }
 }
