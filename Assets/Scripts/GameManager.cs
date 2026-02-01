@@ -107,97 +107,63 @@ public class GameManager : MonoBehaviour
     {
         if (uiManager == null) return;
 
+        int examined = maxAttempts - remainingAttempts;
+
         uiManager.ShowPopup(
             title: "Examinations Complete",
-            body: $"You've used all {maxAttempts} examinations for this location tonight.",
-            leftButtonText: null, // Hide left button
-            rightButtonText: "Leave Location",
-            onLeftClick: null,
-            onRightClick: () => ShowEndNightSummary()
+            body: $"You've used all {examined}/{maxAttempts} examinations for this location tonight.\n\nProceed to end the night?",
+            leftButtonText: "Cancel",
+            rightButtonText: "End Night",
+            onLeftClick: () => uiManager.ClosePopup(),
+            onRightClick: () => EndNightAndLeave()
         );
     }
 
     public void OnLeaveLocationRequested()
     {
         if (uiManager == null) return;
-        Debug.Log("This function is triggred.");
-
-        // Check if player has remaining attempts
-        if (remainingAttempts > 0)
-        {
-            // Show confirmation
-            string message = remainingAttempts == 1
-                ? "You still have 1 examination remaining. Are you sure you want to leave?"
-                : $"You still have {remainingAttempts} examinations remaining. Are you sure you want to leave?";
-
-            uiManager.ShowPopup(
-                title: "Leave Location?",
-                body: message,
-                leftButtonText: "Cancel",
-                rightButtonText: "Yes, Leave",
-                onLeftClick: () => uiManager.ClosePopup(),
-                onRightClick: () => ShowEndNightSummary()
-            );
-        }
-        else
-        {
-            // No attempts left, just leave
-            ShowEndNightSummary();
-        }
-    }
-
-    private void ShowEndNightSummary()
-    {
-        if (uiManager == null) return;
+        Debug.Log("Leave location requested.");
 
         int examined = maxAttempts - remainingAttempts;
-        string message = $"You examined {examined}/{maxAttempts} items at the {locationName}.";
 
-        if (GameProgressManager.Instance != null)
-        {
-            int nextNight = GameProgressManager.Instance.currentNight + 1;
-            int totalNights = GameProgressManager.Instance.totalNights;
-
-            if (nextNight <= totalNights)
-                message += $"\n\nReady to continue to Night {nextNight}?";
-            else
-                message += "\n\nThis was the final night!";
-        }
+        string message = $"You have used {examined}/{maxAttempts} examinations at the {locationName}.\n\nProceed to end the night?";
 
         uiManager.ShowPopup(
-            title: "Night Investigation Complete",
+            title: "End Night?",
             body: message,
-            leftButtonText: "Review Notes",
+            leftButtonText: "Cancel",
             rightButtonText: "End Night",
-            onLeftClick: () => OnReviewNotes(),
-            onRightClick: () => OnContinueToNextNight()
+            onLeftClick: () => uiManager.ClosePopup(),
+            onRightClick: () => EndNightAndLeave()
         );
     }
 
-    private void OnReviewNotes()
+    private void EndNightAndLeave()
     {
-        Debug.Log("Opening Notes/Journal...");
-        // TODO: Open notes UI
-        // For now, just close popup
-        uiManager.ClosePopup();
-    }
+        Debug.Log("EndNightAndLeave called!");
 
-    private void OnContinueToNextNight()
-    {
+        // End the night in GameProgressManager
         if (GameProgressManager.Instance != null)
         {
+            Debug.Log($"Current night BEFORE EndNight: {GameProgressManager.Instance.currentNight}");
             GameProgressManager.Instance.EndNight();
+            Debug.Log($"Current night AFTER EndNight: {GameProgressManager.Instance.currentNight}");
 
+            // Check if all nights are complete
             if (GameProgressManager.Instance.IsGameComplete())
             {
-                Debug.Log("All nights complete! Time for final deduction.");
-                // SceneManager.LoadScene("FinalDeductionScene");
-            }
-            else
-            {
-                SceneManager.LoadScene("LocationSelectionScene");
+                Debug.Log("All nights complete! Going to deduction.");
+                SceneManager.LoadScene("DeductionScene");
+                return;
             }
         }
+        else
+        {
+            Debug.LogError("GameProgressManager.Instance is NULL!");
+        }
+
+        // Go back to location selection
+        SceneManager.LoadScene("LocationSelectionScene");
     }
 
     public int GetRemainingAttempts()
