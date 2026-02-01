@@ -71,7 +71,7 @@ public class OrderManager : MonoBehaviour
         }
 
         bool correct = recipe.Matches(CurrentCustomer.CurrentOrder, madeIngredients);
-
+    
         if (correct)
         {
             CurrentCustomer.OnServedCorrect();

@@ -7,6 +7,9 @@ public class OrderUI : MonoBehaviour
     [SerializeField] private TextMeshProUGUI statusText;
     [SerializeField] private GameObject orderBox;
 
+    private string currentOrderText = string.Empty;
+    private string currentStatusText = string.Empty;
+
     public void Awake()
     {
         orderBox.SetActive(false);
@@ -17,7 +20,9 @@ public class OrderUI : MonoBehaviour
     public void ServeOrder(Menu menu)
     {
         orderBox.SetActive(true);
-        orderText.text = string.Format(menu.ToString());
+        currentOrderText = string.Format(menu.ToString());
+        orderText.text = currentOrderText;
+
     }
 
     public void OnSuccess()
@@ -29,6 +34,21 @@ public class OrderUI : MonoBehaviour
 
     public void OnFailure()
     {
-        statusText.text = string.Format("your order is wrong");
+        currentStatusText = string.Format("your order is wrong");
+        statusText.text = currentStatusText;
+    }
+
+    public void OnListen()
+    {
+        orderText.text = string.Empty;
+        statusText.text = string.Empty;
+        orderBox.SetActive(false);
+    }
+    
+    public void FinishListen()
+    {
+        orderText.text = currentOrderText;
+        statusText.text = currentStatusText;
+        orderBox.SetActive(true);
     }
 }
