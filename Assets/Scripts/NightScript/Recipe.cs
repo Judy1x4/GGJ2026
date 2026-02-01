@@ -7,7 +7,6 @@ public enum Menu
     Cheeseburger,
     ClassicBurger,
     VeggieBurger,
-    PickleBurger
 }
 
 public class Recipe : MonoBehaviour
@@ -21,9 +20,8 @@ public class Recipe : MonoBehaviour
         Recipes = new Dictionary<Menu, List<Ingredient>>
         {
             { Menu.Cheeseburger, new List<Ingredient>{ ingredientsSource.lettuce, ingredientsSource.tomato, ingredientsSource.pickle, ingredientsSource.onion, ingredientsSource.cheese, ingredientsSource.patty } },
-            { Menu.ClassicBurger, new List<Ingredient>{ ingredientsSource.lettuce, ingredientsSource.tomato, ingredientsSource.onion, ingredientsSource.patty } },
-            { Menu.VeggieBurger,  new List<Ingredient>{ ingredientsSource.lettuce, ingredientsSource.tomato, ingredientsSource.pickle, ingredientsSource.onion, ingredientsSource.cheese } },
-            { Menu.PickleBurger,  new List<Ingredient>{ ingredientsSource.pickle, ingredientsSource.onion, ingredientsSource.cheese, ingredientsSource.patty } },
+            { Menu.ClassicBurger, new List<Ingredient>{ ingredientsSource.lettuce, ingredientsSource.tomato, ingredientsSource.onion, ingredientsSource.patty, ingredientsSource.pickle } },
+            { Menu.VeggieBurger,  new List<Ingredient>{ ingredientsSource.lettuce, ingredientsSource.tomato, ingredientsSource.pickle, ingredientsSource.onion } },
         };
     }
 
