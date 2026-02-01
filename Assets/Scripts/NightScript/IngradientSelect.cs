@@ -21,4 +21,14 @@ public class IngredientSelect : MonoBehaviour, IPointerClickHandler
             orderSubmit.currentPlate.Add(ingredient);
         }
     }
+
+    public void DisableCollider()
+    {
+        GetComponent<BoxCollider2D>().enabled = false;
+    }
+
+    public void ActivateCollider()
+    {
+        GetComponent<BoxCollider2D>().enabled = true;
+    }
 }
