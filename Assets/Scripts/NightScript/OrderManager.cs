@@ -5,6 +5,8 @@ public class OrderManager : MonoBehaviour
 {
     [SerializeField] private List<MonoBehaviour> customerBehaviours = new();
     [SerializeField] private Recipe recipe; // drag your Recipe component here
+    [SerializeField] private OrderUI orderUI;
+
 
     private int currentIndex = -1;
     public ICustomer CurrentCustomer { get; private set; }
@@ -25,7 +27,6 @@ public class OrderManager : MonoBehaviour
 
         if (currentIndex >= customerBehaviours.Count)
         {
-
             CurrentCustomer = null;
             Debug.Log("All customers served!");
             return;
@@ -48,8 +49,11 @@ public class OrderManager : MonoBehaviour
             return;
         }
 
+        // Serve
         mb.gameObject.SetActive(true);
         CurrentCustomer.Order();
+        orderUI.ServeOrder(CurrentCustomer.CurrentOrder);
+
     }
 
     public void SubmitOrder(List<Ingredient> madeIngredients)
@@ -67,21 +71,18 @@ public class OrderManager : MonoBehaviour
         }
 
         bool correct = recipe.Matches(CurrentCustomer.CurrentOrder, madeIngredients);
-        Debug.LogError("Incorrect." + CurrentCustomer.CurrentOrder);
-        foreach (var ingredients in madeIngredients)
-        {
-            Debug.Log(ingredients);
-        }
-
+    
         if (correct)
         {
             CurrentCustomer.OnServedCorrect();
             CurrentCustomer.FinishOrder();
+            orderUI.OnSuccess();
             NextCustomer();
         }
         else
         {
             CurrentCustomer.OnServedWrong();
+            orderUI.OnFailure();
         }
     }
 }
