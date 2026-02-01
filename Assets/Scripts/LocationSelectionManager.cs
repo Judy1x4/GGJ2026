@@ -8,7 +8,6 @@ public class LocationSelectionManager : MonoBehaviour
 {
     [Header("UI References")]
     public TextMeshProUGUI nightDisplay;
-    public Button notesButton;
 
     [Header("Location Buttons")]
     public LocationButton[] locationButtons;
@@ -21,9 +20,17 @@ public class LocationSelectionManager : MonoBehaviour
         InitializeLocations();
         UpdateLocationButtons(); 
 
-        if (notesButton != null)
+        if (JournalButtonManager.Instance != null)
         {
-            notesButton.onClick.AddListener(OpenNotes);
+            JournalButtonManager.Instance.ShowButton(); 
+        }
+    }
+
+    private void OnDestroy()
+    {
+        if (JournalButtonManager.Instance != null)
+        {
+            JournalButtonManager.Instance.HideButton(); 
         }
     }
 
@@ -53,11 +60,5 @@ public class LocationSelectionManager : MonoBehaviour
         Debug.Log($"Loading scene: {location.sceneName}");
 
         SceneManager.LoadScene(location.sceneName);
-    }
-
-    private void OpenNotes()
-    {
-        Debug.Log("Opening notes");
-        // TODO: Implement Notes 
     }
 }

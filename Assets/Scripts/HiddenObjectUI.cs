@@ -1,74 +1,154 @@
-using System.Collections; 
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
-using TMPro; 
+using TMPro;
+using System.Collections.Generic;
 
 public class HiddenObjectUI : MonoBehaviour
 {
-    public static HiddenObjectUI Instance;
-
-    // WrongClickX
+    [Header("X Marker")]
     public Image xMarker;
+    public float xDisplayDuration = 1f;
+
+    [Header("Multi-Purpose Popup")]
     public GameObject popupPanel;
     public TextMeshProUGUI popupTitle;
     public TextMeshProUGUI popupBody;
-    public Button closeButton;
+    public Button leftButton;
+    public Button rightButton;
+    public TextMeshProUGUI leftButtonText;
+    public TextMeshProUGUI rightButtonText;
 
-    public float xDisplayDuration = 1f;
-
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    // Track current item being viewed
+    private string currentItemName;
+    private List<ItemTrait> currentHighlightedTraits;
+    
+    private void Start()
     {
         if (xMarker != null)
-        {
             xMarker.gameObject.SetActive(false);
-        }
 
         if (popupPanel != null)
-        {
             popupPanel.SetActive(false);
-        }
-
-        if (closeButton != null)
-        {
-            closeButton.onClick.AddListener(ClosePopup);
-        }
-        
     }
 
     public void ShowXMarker(Vector2 position)
     {
         if (xMarker == null) return;
-        xMarker.transform.position = position; 
+
+        xMarker.transform.position = position;
         xMarker.gameObject.SetActive(true);
 
-        // Hide after xDisplayDuration
         Invoke(nameof(HideXMarker), xDisplayDuration);
     }
 
     private void HideXMarker()
     {
         if (xMarker != null)
-        {
             xMarker.gameObject.SetActive(false);
+    }
+
+    // Show item with save to journal button
+    public void ShowItemWithTraits(string title, string description, List<ItemTrait> highlightedTraits, Hotspot hotspot)
+    {
+        // Store current item info
+        currentItemName = hotspot.GetItemName();
+        currentHighlightedTraits = highlightedTraits;
+
+        // Determine if there are highlighted traits to save
+        bool hasHighlightedTraits = highlightedTraits != null && highlightedTraits.Count > 0;
+
+        // Show popup with Save to Journal as right button
+        ShowPopup(
+            title: title,
+            body: description,
+            leftButtonText: "Close",
+            rightButtonText: hasHighlightedTraits ? "Save" : null,
+            onLeftClick: () => ClosePopup(),
+            onRightClick: hasHighlightedTraits ? (System.Action)OnSaveToJournal : null
+        );
+    }
+
+    private void OnSaveToJournal()
+    {
+        if (ClueManager.Instance != null && currentHighlightedTraits != null && currentHighlightedTraits.Count > 0)
+        {
+            ClueManager.Instance.AddItemTraits(currentItemName, currentHighlightedTraits);
+            Debug.Log($"Saved all traits from {currentItemName} to journal");
+
+            // Give visual feedback
+            if (rightButtonText != null)
+            {
+                string originalText = rightButtonText.text;
+                rightButtonText.text = "Saved!";
+
+                // Disable button temporarily
+                if (rightButton != null)
+                    rightButton.interactable = false;
+
+                // Reset after 1 second
+                Invoke(nameof(ResetSaveButtonState), 1f);
+            }
+        }
+        else
+        {
+            Debug.LogWarning("Cannot save - no highlighted traits or ClueManager missing");
         }
     }
 
-    public void ShowPopup(string title, string description)
+    private void ResetSaveButtonState()
     {
-        if (popupPanel == null)
+        if (rightButtonText != null)
         {
-            return; 
+            rightButtonText.text = "Save to Journal";
         }
+
+        if (rightButton != null)
+        {
+            rightButton.interactable = true;
+        }
+    }
+
+    public void ShowPopup(
+        string title,
+        string body,
+        string leftButtonText,
+        string rightButtonText,
+        System.Action onLeftClick,
+        System.Action onRightClick)
+    {
+        if (popupPanel == null) return;
 
         if (popupTitle != null)
-        {
             popupTitle.text = title;
-        }
 
         if (popupBody != null)
+            popupBody.text = body;
+
+        // Configure left button
+        if (leftButton != null && this.leftButtonText != null)
         {
-            popupBody.text = description; 
+            this.leftButtonText.text = leftButtonText;
+            leftButton.gameObject.SetActive(!string.IsNullOrEmpty(leftButtonText));
+
+            leftButton.onClick.RemoveAllListeners();
+            if (onLeftClick != null)
+                leftButton.onClick.AddListener(() => onLeftClick());
+        }
+
+        // Configure right button
+        if (rightButton != null && this.rightButtonText != null)
+        {
+            bool showRightButton = !string.IsNullOrEmpty(rightButtonText);
+            rightButton.gameObject.SetActive(showRightButton);
+
+            if (showRightButton)
+            {
+                this.rightButtonText.text = rightButtonText;
+
+                rightButton.onClick.RemoveAllListeners();
+                if (onRightClick != null)
+                    rightButton.onClick.AddListener(() => onRightClick());
+            }
         }
 
         popupPanel.SetActive(true);
@@ -76,10 +156,11 @@ public class HiddenObjectUI : MonoBehaviour
 
     public void ClosePopup()
     {
+        // Reset current item tracking
+        currentItemName = null;
+        currentHighlightedTraits = null;
+
         if (popupPanel != null)
-        {
-            popupPanel
-                .SetActive(false);
-        }
+            popupPanel.SetActive(false);
     }
 }
