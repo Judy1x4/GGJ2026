@@ -3898,7 +3898,7 @@ MonoBehaviour:
   secretsText: {fileID: 0}
   continueButton: {fileID: 222785947}
   playerStatus: {fileID: 1156628165}
-  nextSceneName: LocationSelectionScene
+  nextSceneName: FirstScene
 --- !u!1 &1546247476
 GameObject:
   m_ObjectHideFlags: 0

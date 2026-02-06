@@ -3,6 +3,7 @@ using UnityEngine.UI;
 using TMPro;
 using System.Collections.Generic;
 
+
 public class JournalUI : MonoBehaviour
 {
     [Header("UI References")]
@@ -13,19 +14,24 @@ public class JournalUI : MonoBehaviour
     public TextMeshProUGUI noCluesText;
     public Button closeJournalButton;
 
+
     [Header("Tabs")]
     public Button itemsTab;
     public Button locationsTab;
     public Button personsTab;
+
 
     [Header("Category Icons")]
     public Sprite itemIcon;
     public Sprite locationIcon;
     public Sprite personIcon;
 
+
     private ClueCategory currentCategory = ClueCategory.Item;
 
+
     public static JournalUI Instance { get; private set; }
+
 
     private void Awake()
     {
@@ -34,13 +40,15 @@ public class JournalUI : MonoBehaviour
             Instance = this;
             DontDestroyOnLoad(gameObject);
 
+
             if (journalCanvas != null)
             {
                 DontDestroyOnLoad(journalCanvas.gameObject);
-                
+
                 // Set canvas sorting order so it doesn't block other UI
                 journalCanvas.sortingOrder = 100;
             }
+
 
             Debug.Log("JournalUI singleton created and persisted");
         }
@@ -52,15 +60,25 @@ public class JournalUI : MonoBehaviour
         }
     }
 
+
     private void Start()
     {
         SetupListeners();
     }
 
+
+    private void OnEnable()
+    {
+        // Re-setup listeners when re-enabled (in case of scene changes)
+        SetupListeners();
+    }
+
+
     private void SetupListeners()
     {
         if (journalPanel != null)
             journalPanel.SetActive(false);
+
 
         if (closeJournalButton != null)
         {
@@ -68,17 +86,20 @@ public class JournalUI : MonoBehaviour
             closeJournalButton.onClick.AddListener(CloseJournal);
         }
 
+
         if (itemsTab != null)
         {
             itemsTab.onClick.RemoveAllListeners();
             itemsTab.onClick.AddListener(() => ShowCategory(ClueCategory.Item));
         }
 
+
         if (locationsTab != null)
         {
             locationsTab.onClick.RemoveAllListeners();
             locationsTab.onClick.AddListener(() => ShowCategory(ClueCategory.Location));
         }
+
 
         if (personsTab != null)
         {
@@ -87,13 +108,26 @@ public class JournalUI : MonoBehaviour
         }
     }
 
+
     public void OpenJournal()
     {
         if (journalPanel == null) return;
 
+
+        // Re-setup listeners in case they were lost
+        SetupListeners();
+
+        // Ensure all tabs start interactable
+        if (itemsTab != null) itemsTab.interactable = true;
+        if (locationsTab != null) locationsTab.interactable = true;
+        if (personsTab != null) personsTab.interactable = true;
+        if (closeJournalButton != null) closeJournalButton.interactable = true;
+
+
         currentCategory = ClueCategory.Item;
         RefreshJournal();
         journalPanel.SetActive(true);
+
 
         // Ensure canvas is on top when opened
         if (journalCanvas != null)
@@ -101,21 +135,26 @@ public class JournalUI : MonoBehaviour
             journalCanvas.sortingOrder = 100;
         }
 
+
         Debug.Log("Journal opened");
     }
+
 
     public void CloseJournal()
     {
         if (journalPanel != null)
             journalPanel.SetActive(false);
 
+
         Debug.Log("Journal closed");
     }
+
 
     public bool IsJournalOpen()
     {
         return journalPanel != null && journalPanel.activeSelf;
     }
+
 
     private void ShowCategory(ClueCategory category)
     {
@@ -124,11 +163,13 @@ public class JournalUI : MonoBehaviour
         UpdateTabHighlight();
     }
 
+
     private void RefreshJournal()
     {
         RefreshCluesList();
         UpdateTabHighlight();
     }
+
 
     private void RefreshCluesList()
     {
@@ -138,14 +179,17 @@ public class JournalUI : MonoBehaviour
             Destroy(child.gameObject);
         }
 
+
         if (ClueManager.Instance == null)
         {
             Debug.LogWarning("ClueManager not found!");
             return;
         }
 
+
         // Get clues for current category
         List<ClueEntry> clues = ClueManager.Instance.GetCluesByCategory(currentCategory);
+
 
         // Show "no clues" message if empty
         if (noCluesText != null)
@@ -154,36 +198,44 @@ public class JournalUI : MonoBehaviour
             noCluesText.text = $"No {currentCategory} clues collected yet...";
         }
 
+
         // Create UI entry for each clue
         foreach (var clue in clues)
         {
             GameObject entryObj = Instantiate(clueEntryPrefab, cluesContent);
+
 
             // Set category icon
             Image iconImage = entryObj.transform.Find("CategoryIcon")?.GetComponent<Image>();
             if (iconImage != null)
                 iconImage.sprite = GetCategoryIcon(clue.category);
 
+
             // Set texts
             TextMeshProUGUI sourceText = entryObj.transform.Find("SourceNameText")?.GetComponent<TextMeshProUGUI>();
             TextMeshProUGUI clueText = entryObj.transform.Find("ClueText")?.GetComponent<TextMeshProUGUI>();
 
+
             if (sourceText != null)
                 sourceText.text = $"{clue.sourceName}:";
+
 
             if (clueText != null)
                 clueText.text = clue.clueText;
         }
     }
 
+
     private void UpdateTabHighlight()
     {
         if (itemsTab == null || locationsTab == null || personsTab == null) return;
+
 
         // Reset all to normal
         itemsTab.interactable = true;
         locationsTab.interactable = true;
         personsTab.interactable = true;
+
 
         // Highlight current tab
         switch (currentCategory)
@@ -200,6 +252,7 @@ public class JournalUI : MonoBehaviour
         }
     }
 
+
     private Sprite GetCategoryIcon(ClueCategory category)
     {
         switch (category)
@@ -215,6 +268,7 @@ public class JournalUI : MonoBehaviour
         }
     }
 
+
     public void ClearAllClues()
     {
         if (ClueManager.Instance != null)
@@ -223,6 +277,7 @@ public class JournalUI : MonoBehaviour
             RefreshJournal();
         }
     }
+
 
     /// <summary>
     /// Call this on game reset to properly clean up the journal state
@@ -234,3 +289,4 @@ public class JournalUI : MonoBehaviour
         currentCategory = ClueCategory.Item;
     }
 }
+

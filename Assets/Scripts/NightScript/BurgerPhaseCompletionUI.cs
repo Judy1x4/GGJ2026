@@ -17,7 +17,7 @@ public class BurgerPhaseCompleteUI : MonoBehaviour
     [SerializeField] private PlayerStatus playerStatus;
 
     [Header("Scene Settings")]
-    [SerializeField] private string nextSceneName = "LocationSelectionScene";
+    [SerializeField] private string nextSceneName = "FirstScene";
 
     private void Awake()
     {

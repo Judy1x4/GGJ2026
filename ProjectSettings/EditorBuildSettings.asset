@@ -9,14 +9,14 @@ EditorBuildSettings:
     path: Assets/Scenes/SampleScene.unity
     guid: 8c9cfa26abfee488c85f1582747f6a02
   - enabled: 1
+    path: Assets/Scenes/NightScene.unity
+    guid: ed4522a2b52fad8459421e507a05c323
+  - enabled: 1
     path: Assets/Scenes/FirstScene.unity
     guid: b1a74b6e998555e42a674c2b7d22f9ca
   - enabled: 1
     path: Assets/Scenes/LocationSelectionScene.unity
     guid: a9df37979a242a04fbd7dd10164412ea
-  - enabled: 1
-    path: Assets/Scenes/NightScene.unity
-    guid: ed4522a2b52fad8459421e507a05c323
   - enabled: 1
     path: Assets/Scenes/HabanaScene.unity
     guid: 625ab9e41231b1e419183d80f1e7ef52

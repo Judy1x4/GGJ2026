@@ -3,8 +3,6 @@ using UnityEngine.EventSystems;
 using System.Collections.Generic;
 using NUnit.Framework;
 using static Unity.Collections.AllocatorManager;
-using static UnityEditor.FilePathAttribute;
-using static UnityEditor.Progress;
 using static UnityEngine.Rendering.DebugUI;
 using System.Net.NetworkInformation;
 using Unity.VisualScripting;
